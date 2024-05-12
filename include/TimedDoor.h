@@ -1,7 +1,11 @@
-// Copyright 2021 GHA Test Team
+// Copyright 2024 Dostavalov Semyon
 
 #ifndef INCLUDE_TIMEDDOOR_H_
 #define INCLUDE_TIMEDDOOR_H_
+
+#include <iostream>
+#include <thread> // NOLINT [build/c++11]
+#include <chrono> // NOLINT [build/c++11]
 
 class DoorTimerAdapter;
 class Timer;
