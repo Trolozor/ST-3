@@ -23,7 +23,6 @@ void TimedDoor::unlock() {
         throw std::logic_error("Door opened");
     }
     isOpened = true;
-    adapter = new DoorTimerAdapter(*this);
     Timer timer;
     timer.tregister(iTimeout, adapter);
 }
@@ -33,7 +32,6 @@ void TimedDoor::lock() {
         throw std::logic_error("Door closed");
     }
     isOpened = false;
-    delete adapter;
 }
 
 int TimedDoor::getTimeOut() const {
