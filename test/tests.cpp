@@ -3,15 +3,17 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <cstdint>
+#include <thread>
+#include <chrono>
 #include "TimedDoor.h"
 
 class MockTimerClient : public TimerClient {
-public:
+ public:
     MOCK_METHOD(void, Timeout, (), (override));
 };
 
 class TimedDoorTest : public testing::Test {
-protected:
+ protected:
     TimedDoor door;
     MockTimerClient mockClient;
     Timer timer;

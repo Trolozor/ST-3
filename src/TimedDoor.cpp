@@ -1,5 +1,7 @@
 // Copyright 2024 Dostavalov Semyon
 #include "TimedDoor.h"
+#include <thread>
+#include <chrono>
 
 DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door) : door(door) {}
 
@@ -7,7 +9,8 @@ void DoorTimerAdapter::Timeout() {
     door.throwState();
 }
 
-TimedDoor::TimedDoor(int timeout) : iTimeout(timeout), isOpened(false), adapter(nullptr) {}
+TimedDoor::TimedDoor(int timeout) : iTimeout(timeout),
+isOpened(false), adapter(nullptr) {}
 
 bool TimedDoor::isDoorOpened() {
     return isOpened;
