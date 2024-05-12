@@ -8,8 +8,8 @@ void DoorTimerAdapter::Timeout() {
     door.throwState();
 }
 
-TimedDoor::TimedDoor(int timeout) : iTimeout(timeout),
-isOpened(false), adapter(nullptr) {}
+TimedDoor::TimedDoor(int timeout) : iTimeout(timeout), isOpened(false),
+adapter(nullptr) {}
 
 bool TimedDoor::isDoorOpened() {
     return isOpened;
