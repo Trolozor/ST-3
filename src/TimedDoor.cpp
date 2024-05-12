@@ -6,7 +6,7 @@ DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door) : door(door) {}
 
 void DoorTimerAdapter::Timeout() {
     if (door.isDoorOpened()) {
-        throw std::runtime_error("Door opened long");
+        door.lock();
     }
 }
 
@@ -45,6 +45,7 @@ void TimedDoor::throwState() {
 void Timer::tregister(int timeout, TimerClient* client) {
     this->client = client;
     sleep(timeout);
+    client_->Timeout();
 }
 
 void Timer::sleep(int timeout) {
