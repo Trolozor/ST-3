@@ -7,6 +7,7 @@ DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door) : door(door) {}
 void DoorTimerAdapter::Timeout() {
     if (door.isDoorOpened()) {
         throw std::runtime_error("Timeout");
+        door.lock();
     }
 }
 
