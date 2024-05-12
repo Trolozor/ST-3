@@ -45,7 +45,7 @@ void TimedDoor::throwState() {
 void Timer::tregister(int timeout, TimerClient* client) {
     this->client = client;
     sleep(timeout);
-    client_->Timeout();
+    client->Timeout();
 }
 
 void Timer::sleep(int timeout) {
