@@ -20,6 +20,7 @@ class TimedDoorTest : public testing::Test {
 
     void SetUp() override {
         DoorTimerAdapter adapter(door);
+        door.lock();
     }
 
     void TearDown() override {
