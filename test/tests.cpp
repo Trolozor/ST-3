@@ -20,12 +20,10 @@ class TimedDoorTest : public testing::Test {
 
     void SetUp() override {
         DoorTimerAdapter adapter(door);
-        door.unlock();
     }
 
     void TearDown() override {
         testing::Mock::VerifyAndClear(&mockClient);
-        door.lock();
     }
 };
 
