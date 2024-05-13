@@ -19,19 +19,17 @@ bool TimedDoor::isDoorOpened() {
 }
 
 void TimedDoor::unlock() {
-    if (isDoorOpened()) {
-        throw std::logic_error("Door is already opened");
-    }
     isOpened = true;
+    adapter = new DoorTimerAdapter(*this);
 }
 
 void TimedDoor::lock() {
-    if (!isDoorOpened()) {
-        throw std::logic_error("Door is already closed");
-    }
     isOpened = false;
+    if (adapter != nullptr) {
+        delete adapter;
+        adapter = nullptr;
+    }
 }
-
 
 void TimedDoor::throwState() {
     adapter->Timeout();
@@ -45,8 +43,7 @@ int TimedDoor::getTimeOut() const {
     return iTimeout;
 }
 
-void Timer::tregister(int t, TimerClient* c) {
-    client = c;
-    sleep(t);
+void Timer::tregister(int timeout, TimerClient* client) {
+    sleep(timeout);
     client->Timeout();
 }

@@ -14,16 +14,13 @@ class TimedDoorTest : public ::testing::Test {
 protected:
     TimedDoor door;
     MockTimerClient mockClient;
-    Timer timer;
-
-    TimedDoorTest() : door(1), timer() {}
 
     void SetUp() override {
-        timer.tregister(door.getTimeOut(), &mockClient);
+        door = TimedDoor(5);
     }
 
     void TearDown() override {
-        testing::Mock::VerifyAndClearExpectations(&mockClient);
+        door.lock();
     }
 };
 
