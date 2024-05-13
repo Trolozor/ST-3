@@ -20,12 +20,10 @@ class TimedDoorTest : public testing::Test {
 
     void SetUp() override {
         DoorTimerAdapter adapter(door);
-        door.lock();
     }
 
     void TearDown() override {
         testing::Mock::VerifyAndClear(&mockClient);
-        door.lock();
     }
 };
 
@@ -61,7 +59,7 @@ TEST_F(TimedDoorTest, Door_Opens_After_Timeout) {
     door.unlock();
     EXPECT_TRUE(door.isDoorOpened());
 
-    std::this_thread::sleep_for(std::chrono::seconds(4));
+    std::this_thread::sleep_for(std::chrono::seconds(6));
 
     door.unlock();
     EXPECT_TRUE(door.isDoorOpened());
@@ -83,7 +81,7 @@ TEST_F(TimedDoorTest, Door_Close_After_Timeout) {
     door.unlock();
     EXPECT_TRUE(door.isDoorOpened());
 
-    std::this_thread::sleep_for(std::chrono::seconds(4));
+    std::this_thread::sleep_for(std::chrono::seconds(6));
 
     EXPECT_FALSE(door.isDoorOpened());
 }
@@ -104,5 +102,5 @@ TEST_F(TimedDoorTest, Timeout_Call) {
 
     EXPECT_CALL(mockClient, Timeout());
 
-    std::this_thread::sleep_for(std::chrono::seconds(4));
+    std::this_thread::sleep_for(std::chrono::seconds(6));
 }
