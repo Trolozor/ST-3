@@ -2,12 +2,13 @@
 
 #include "TimedDoor.h"
 
-DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door) : door(door) {}
+DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door_) : door(door_) {}
 
 void DoorTimerAdapter::Timeout() {
     if (door.isDoorOpened()) {
         throw std::runtime_error("Timeout");
     }
+    return;
 }
 
 TimedDoor::TimedDoor(int timeout) : iTimeout(timeout), isOpened(false) {
@@ -40,10 +41,10 @@ void TimedDoor::throwState() {
     adapter->Timeout();
 }
 
-void Timer::tregister(int timeout, TimerClient* client) {
-    this->client = client;
+void Timer::tregister(int timeout, TimerClient* client_) {
+    this->client = client_;
     sleep(timeout);
-    client->Timeout();
+    client_->Timeout();
 }
 
 void Timer::sleep(int timeout) {
