@@ -24,6 +24,7 @@ class TimedDoorTest : public testing::Test {
 
     void TearDown() override {
         testing::Mock::VerifyAndClear(&mockClient);
+        door.lock();
     }
 };
 
