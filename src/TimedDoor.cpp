@@ -5,10 +5,7 @@
 DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door_) : door(door_) {}
 
 void DoorTimerAdapter::Timeout() {
-    if (door.isDoorOpened()) {
-        throw std::runtime_error("Timeout");
-    }
-    return;
+    this->door.throwState();
 }
 
 TimedDoor::TimedDoor(int timeout) : iTimeout(timeout), isOpened(false) {
@@ -37,8 +34,14 @@ int TimedDoor::getTimeOut() const {
     return iTimeout;
 }
 
+TimedDoor::~TimedDoor() {
+    delete adapter;
+}
+
 void TimedDoor::throwState() {
-    adapter->Timeout();
+    if (isDoorOpened()) {
+        throw std::runtime_error("Timeout");
+    }
 }
 
 void Timer::tregister(int timeout, TimerClient* client_) {
