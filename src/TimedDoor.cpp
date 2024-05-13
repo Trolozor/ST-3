@@ -2,14 +2,16 @@
 
 #include "TimedDoor.h"
 
-DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door_) : door(door_) {}
+DoorTimerAdapter::DoorTimerAdapter(TimedDoor& door) : door(door) {}
 
 void DoorTimerAdapter::Timeout() {
-    door.throwState();
+    if (door.isDoorOpened()) {
+        throw std::runtime_error("Door is opened too long");
+    }
 }
 
-TimedDoor::TimedDoor(int timeout) : iTimeout(timeout), isOpened(false) {
-     adapter = new DoorTimerAdapter(*this);
+TimedDoor::TimedDoor(int timeout) : isOpened(false), iTimeout(timeout) {
+    adapter = new DoorTimerAdapter(*this);
 }
 
 bool TimedDoor::isDoorOpened() {
@@ -18,35 +20,33 @@ bool TimedDoor::isDoorOpened() {
 
 void TimedDoor::unlock() {
     if (isDoorOpened()) {
-        throw std::logic_error("Door opened");
+        throw std::logic_error("Door is already opened");
     }
     isOpened = true;
-    adapter->Timeout();
 }
 
 void TimedDoor::lock() {
     if (!isDoorOpened()) {
-        throw std::logic_error("Door closed");
+        throw std::logic_error("Door is already closed");
     }
     isOpened = false;
+}
+
+
+void TimedDoor::throwState() {
+    adapter->Timeout();
+}
+
+void Timer::sleep(int seconds) {
+    std::this_thread::sleep_for(std::chrono::seconds(seconds));
 }
 
 int TimedDoor::getTimeOut() const {
     return iTimeout;
 }
 
-void TimedDoor::throwState() {
-    if (isDoorOpened()) {
-        throw std::runtime_error("Timeout");
-    }
-}
-
-void Timer::tregister(int timeout, TimerClient* client_) {
-    this->client = client_;
-    sleep(timeout);
-    client_->Timeout();
-}
-
-void Timer::sleep(int timeout) {
-    std::this_thread::sleep_for(std::chrono::seconds(timeout));
+void Timer::tregister(int t, TimerClient* c) {
+    client = c;
+    sleep(t);
+    client->Timeout();
 }
