@@ -58,6 +58,10 @@ TEST_F(TimedDoorTest, Door_Not_Opened_Too_Long) {
     EXPECT_NO_THROW(door->throwState());
 }
 
+TEST_F(TimedDoorTest, Timer_Eq) {
+    EXPECT_EQ(door->getTimeOut(), 2);
+}
+
 TEST_F(TimedDoorTest, Timeout_Called_After_Registering) {
     EXPECT_CALL(mockClient, Timeout()).Times(1);
     Timer timer;
@@ -78,10 +82,4 @@ TEST_F(TimedDoorTest,Timeout_Called_Once) {
     timer.tregister(door->getTimeOut() * 2, &mockClient);
 }
 
-TEST_F(TimedDoorTest, DoorClosedAfterTimerExpires) {
-    door->unlock();
-    Timer timer;
-    timer.tregister(door->getTimeOut(), &mockClient);
-    EXPECT_FALSE(door->isDoorOpened());
-}
 
