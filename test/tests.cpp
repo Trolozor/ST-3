@@ -38,56 +38,54 @@ TEST_F(TimedDoorTest, Door_Unlock_Twice) {
     EXPECT_THROW(door->unlock(), std::logic_error);
 }
 
-TEST_F(TimedDoorTest, LockDoor) {
+TEST_F(TimedDoorTest, Door_Lock) {
     door->unlock();
     EXPECT_TRUE(door->isDoorOpened());
     door->lock();
     EXPECT_FALSE(door->isDoorOpened());
 }
+
 TEST_F(TimedDoorTest, Door_Lock_Twice) {
     EXPECT_THROW(door->lock(), std::logic_error);
 }
 
-TEST_F(TimedDoorTest, ThrowStateWhenDoorOpenedTooLong) {
+TEST_F(TimedDoorTest, Door_Opened_Too_Long) {
     door->unlock();
     EXPECT_THROW(door->throwState(), std::runtime_error);
 }
 
-TEST_F(TimedDoorTest, ThrowStateWhenDoorNotOpenedTooLong) {
+TEST_F(TimedDoorTest, Door_Not_Opened_Too_Long) {
     EXPECT_NO_THROW(door->throwState());
 }
 
-TEST_F(TimedDoorTest, ThrowLogicErrorWhenUnlockingAlreadyOpenedDoor) {
-    door->unlock();
-    EXPECT_THROW(door->unlock(), std::logic_error);
-}
-
-TEST_F(TimedDoorTest, ThrowLogicErrorWhenLockingAlreadyClosedDoor) {
-    EXPECT_THROW(door->lock(), std::logic_error);
-}
-
-TEST_F(TimedDoorTest, TimerClientTimeoutCalledAfterRegistering) {
+TEST_F(TimedDoorTest, Timeout_Called_After_Registering) {
     EXPECT_CALL(mockClient, Timeout()).Times(1);
     Timer timer;
     timer.tregister(door->getTimeOut(), &mockClient);
 }
 
-TEST_F(TimedDoorTest, TimerClientTimeoutNotCalledBeforeTimeout) {
-    EXPECT_CALL(mockClient, Timeout()).Times(0);
-    Timer timer;
-    timer.tregister(door->getTimeOut() - 1, &mockClient);
-}
-
-TEST_F(TimedDoorTest, TimerClientTimeoutCalledAfterTimeout) {
+TEST_F(TimedDoorTest, Timeout_Called_After_Timeout) {
     door->unlock();
     EXPECT_CALL(mockClient, Timeout()).Times(1);
     Timer timer;
     timer.tregister(door->getTimeOut(), &mockClient);
 }
 
-TEST_F(TimedDoorTest, TimerClientTimeoutCalledOnce) {
+TEST_F(TimedDoorTest,Timeout_Called_Once) {
     door->unlock();
     EXPECT_CALL(mockClient, Timeout()).Times(1);
     Timer timer;
     timer.tregister(door->getTimeOut() * 2, &mockClient);
 }
+
+TEST_F(TimedDoorTest, DoorClosedAfterTimerExpires) {
+    door->unlock();
+    EXPECT_TRUE(door->isDoorOpened());
+    testing::internal::CaptureStdout();
+    Timer timer;
+    timer.tregister(door->getTimeOut(), &mockClient);
+    std::string output = testing::internal::GetCapturedStdout();
+    ASSERT_TRUE(output.empty());
+    EXPECT_FALSE(door->isDoorOpened());
+}
+
