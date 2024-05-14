@@ -75,7 +75,7 @@ TEST_F(TimedDoorTest, Timeout_Called_After_Timeout) {
     timer.tregister(door->getTimeOut(), &mockClient);
 }
 
-TEST_F(TimedDoorTest,Timeout_Called_Once) {
+TEST_F(TimedDoorTest, Timeout_Called_Once) {
     door->unlock();
     EXPECT_CALL(mockClient, Timeout()).Times(1);
     Timer timer;
