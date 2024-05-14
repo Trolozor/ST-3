@@ -19,14 +19,14 @@ bool TimedDoor::isDoorOpened() {
 }
 
 void TimedDoor::unlock() {
-    if (isDoorOpened) {
+    if (isOpened) {
         throw std::logic_error("Door already opened");
     }
     isOpened = true;
 }
 
 void TimedDoor::lock() {
-    if (!isDoorOpened) {
+    if (!isOpened) {
         throw std::logic_error("Door already closed");
     }
     isOpened = false;
