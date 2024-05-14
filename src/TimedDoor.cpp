@@ -19,16 +19,17 @@ bool TimedDoor::isDoorOpened() {
 }
 
 void TimedDoor::unlock() {
+    if (isDoorOpened) {
+        throw std::logic_error("Door already opened");
+    }
     isOpened = true;
-    adapter = new DoorTimerAdapter(*this);
 }
 
 void TimedDoor::lock() {
-    isOpened = false;
-    if (adapter != nullptr) {
-        delete adapter;
-        adapter = nullptr;
+    if (!isDoorOpened) {
+        throw std::logic_error("Door already closed");
     }
+    isOpened = false;
 }
 
 void TimedDoor::throwState() {
