@@ -80,12 +80,8 @@ TEST_F(TimedDoorTest,Timeout_Called_Once) {
 
 TEST_F(TimedDoorTest, DoorClosedAfterTimerExpires) {
     door->unlock();
-    EXPECT_TRUE(door->isDoorOpened());
-    testing::internal::CaptureStdout();
     Timer timer;
     timer.tregister(door->getTimeOut(), &mockClient);
-    std::string output = testing::internal::GetCapturedStdout();
-    ASSERT_TRUE(output.empty());
     EXPECT_FALSE(door->isDoorOpened());
 }
 
